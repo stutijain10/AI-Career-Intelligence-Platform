@@ -90,11 +90,13 @@ if submit_question:
 
                 answer = response.choices[0].message.content
 
+                st.success("Response Generated Successfully!")
                 st.write(answer)
-
             except Exception as e:
 
                 st.error(f"Error: {e}")
+    else:
+        st.warning("Please enter a question.")
 
 # =========================
 # AI QUIZ GENERATOR
@@ -136,11 +138,14 @@ if submit_quiz:
 
                 quiz = response.choices[0].message.content
 
+                st.success("Response Generated Successfully!")
                 st.write(quiz)
 
             except Exception as e:
 
                 st.error(f"Error: {e}")
+    else:
+        st.warning("Please enter a quiz topic.")
 
 # =========================
 # LEARNING ROADMAP GENERATOR
@@ -181,11 +186,14 @@ if submit_roadmap:
 
                 roadmap = response.choices[0].message.content
 
+                st.success("Response Generated Successfully!")
                 st.write(roadmap)
 
             except Exception as e:
 
                 st.error(f"Error: {e}")
+    else:
+        st.warning("Please enter a roadmap topic.")
 
 # =========================
 # RESUME ANALYZER
@@ -269,6 +277,7 @@ if submit_resume:
 
             st.subheader("Performance Overview")
 
+            plt.title("Resume Performance Analysis")
             st.pyplot(plt)
 
             st.caption("This graph shows how well your resume matches the job and how many relevant skills you have.")
@@ -276,3 +285,9 @@ if submit_resume:
     except Exception as e:
 
         st.error(f"Error: {e}")
+
+st.markdown("---")
+
+st.markdown(
+    "Made with ❤️ using Streamlit + Groq AI"
+)

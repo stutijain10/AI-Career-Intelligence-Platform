@@ -1,42 +1,85 @@
-# AI Career Intelligence Platform 🚀
+# 🚀 AI STEM Learning & Career Intelligence Platform
 
-## 📌 About the Project
-
-This project is a simple AI-based web application that helps users understand how well their resume matches a job description.
-
-Many students apply for jobs without knowing if their skills match the requirements. This project tries to solve that problem by giving useful insights like match score, missing skills, and suggestions for improvement.
+An AI-powered platform that helps students learn STEM concepts, generate quizzes, create personalized learning roadmaps, and analyze resumes for career guidance using Large Language Models and NLP.
 
 ---
 
-## 🎯 Features
+## ✨ Features
 
-* Calculates resume-job match score
-* Extracts skills from resume
-* Identifies missing skills
-* Recommends suitable job roles
-* Provides improvement suggestions
-* Shows results using a graph
-
----
-
-## 🛠️ Technologies Used
-
-* Python
-* Streamlit
-* Scikit-learn
-* Matplotlib
+- 🤖 AI STEM Doubt Solver
+- 🧠 AI Quiz Generator
+- 🗺️ Personalized Learning Roadmaps
+- 📄 Resume Analyzer
+- 📊 Resume Match Score Visualization
+- 📁 PDF Resume Upload Support
+- 💼 Career Role Recommendation
+- 🌙 Dark Mode UI
+- ☁️ Live Streamlit Deployment
 
 ---
 
-## ⚙️ How to Run
+## 🛠️ Tech Stack
 
-1. Install required libraries:
+### Frontend
+- Streamlit
+
+### Backend
+- Python
+
+### AI/LLM
+- Groq API
+- Llama 3.1 8B Instant
+
+### Libraries
+- Matplotlib
+- Scikit-learn
+- PyPDF2
+- dotenv
+
+### Deployment
+- Streamlit Community Cloud
+
+---
+
+## 🎯 Problem Statement
+
+Students often struggle with understanding STEM concepts, preparing for careers, identifying skill gaps in resumes, and finding personalized learning guidance.
+
+---
+
+## 💡 Solution
+
+This platform combines AI-powered learning assistance and career intelligence into one unified solution.
+
+Students can:
+- Ask STEM doubts
+- Generate quizzes
+- Build learning roadmaps
+- Upload resumes
+- Analyze job compatibility
+- Receive AI-powered career guidance
+
+---
+
+## 🚀 Future Scope
+
+- AI Interview Preparation
+- Voice Assistant Integration
+- Resume Improvement Suggestions
+- Multi-language Support
+- Chat History
+- Real-time Career Trends Analysis
+
+---
+
+## ⚡ Installation
 
 ```bash
 pip install -r requirements.txt
+
 ```
 
-2. Run the app:
+Run the Streamlit app:
 
 ```bash
 python -m streamlit run app.py
@@ -44,15 +87,18 @@ python -m streamlit run app.py
 
 ---
 
-## 📊 Output
+## 🌐 Live Demo
 
-* Match Score
-* Skills detected
-* Missing skills
-* Recommended role
-* Suggestions
-* Graph visualization
+https://ai-career-intelligence-platform-bkevmuj72ojjvkxemknvkj.streamlit.app/
 
 ---
 
+## 📂 GitHub Repository
 
+https://github.com/stutijain10/AI-Career-Intelligence-Platform
+
+---
+
+## 👩‍💻 Author
+
+Stuti Jain

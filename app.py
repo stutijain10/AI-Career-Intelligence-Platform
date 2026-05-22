@@ -9,7 +9,15 @@ from src.similarity import calculate_similarity
 from src.skill_extractor import extract_skills
 from src.recommendation import recommend_role
 
+# =========================
+# LOAD ENV VARIABLES
+# =========================
+
 load_dotenv()
+
+# =========================
+# PAGE CONFIG
+# =========================
 
 st.set_page_config(
     page_title="AI STEM Learning Platform",
@@ -17,274 +25,351 @@ st.set_page_config(
     layout="wide"
 )
 
+# =========================
+# GROQ CLIENT
+# =========================
+
 client = OpenAI(
-    api_key=st.secrets["GROQ_API_KEY"],
+    api_key=os.getenv("GROQ_API_KEY"),
     base_url="https://api.groq.com/openai/v1"
 )
 
-# Title
-st.title("🚀 AI STEM Learning & Career Intelligence Platform")
+# =========================
+# TABS
+# =========================
 
-st.markdown("""
-Welcome to the AI-powered STEM Learning & Career Intelligence Platform 🎓
+tabs = st.tabs([
+    "🏠 Home",
+    "🤖 Doubt Solver",
+    "🧠 Quiz Generator",
+    "🗺️ Roadmap",
+    "📄 Resume Analyzer"
+])
 
-This platform helps students:
-- Learn STEM topics
-- Generate quizzes
-- Create learning roadmaps
-- Analyze resumes
-- Get AI-powered career insights
-""")
+# =========================
+# HOME PAGE
+# =========================
 
-st.markdown("Analyze your resume, learn STEM skills, and get AI-powered career guidance.")
+with tabs[0]:
 
-# Sidebar
-st.sidebar.title("🚀 Navigation")
+    st.title("🚀 AI STEM Learning & Career Intelligence Platform")
 
-st.sidebar.info("""
-AI STEM Learning Platform
+    st.markdown("""
+    Welcome to the AI-powered STEM Learning & Career Intelligence Platform 🎓
 
-Features:
-- 🤖 AI Doubt Solver
-- 🧠 Quiz Generator
-- 🗺️ Learning Roadmap
-- 📄 Resume Analyzer
-""")
+    This platform helps students:
+
+    - Learn STEM topics
+    - Generate quizzes
+    - Create learning roadmaps
+    - Analyze resumes
+    - Get AI-powered career insights
+    """)
+
+    st.markdown(
+        "Analyze your resume, learn STEM skills, and get AI-powered career guidance."
+    )
 
 # =========================
 # AI DOUBT SOLVER
 # =========================
 
-st.header("🤖 AI Doubt Solver")
+with tabs[1]:
 
-with st.form("doubt_form"):
+    st.header("🤖 AI Doubt Solver")
 
-    question = st.text_input(
-        "Ask any STEM question",
-        placeholder="Example: Explain Newton's Laws"
-    )
+    with st.form("doubt_form"):
 
-    submit_question = st.form_submit_button("Get Answer")
+        question = st.text_input(
+            "Ask any STEM question",
+            placeholder="Example: Explain Newton's Laws"
+        )
 
-if submit_question:
+        submit_question = st.form_submit_button("Get Answer")
 
-    if question:
+    if submit_question:
 
-        with st.spinner("Generating response..."):
+        if question:
 
-            try:
+            with st.spinner("Generating response..."):
 
-                response = client.chat.completions.create(
-                    model="llama-3.1-8b-instant",
-                    messages=[
-                        {
-                            "role": "system",
-                            "content": "You are a friendly STEM teacher who explains concepts simply."
-                        },
-                        {
-                            "role": "user",
-                            "content": question
-                        }
-                    ]
-                )
+                try:
 
-                answer = response.choices[0].message.content
+                    response = client.chat.completions.create(
+                        model="llama-3.1-8b-instant",
+                        messages=[
+                            {
+                                "role": "system",
+                                "content": "You are a friendly STEM teacher who explains concepts simply."
+                            },
+                            {
+                                "role": "user",
+                                "content": question
+                            }
+                        ]
+                    )
 
-                st.success("Response Generated Successfully!")
-                st.write(answer)
-            except Exception as e:
+                    answer = response.choices[0].message.content
 
-                st.error(f"Error: {e}")
-    else:
-        st.warning("Please enter a question.")
+                    st.success("Response Generated Successfully!")
+                    st.write(answer)
+
+                except Exception as e:
+
+                    st.error(f"Error: {e}")
+
+        else:
+
+            st.warning("Please enter a question.")
 
 # =========================
 # AI QUIZ GENERATOR
 # =========================
 
-st.markdown("---")
-st.header("🧠 AI Quiz Generator")
+with tabs[2]:
 
-with st.form("quiz_form"):
+    st.header("🧠 AI Quiz Generator")
 
-    quiz_topic = st.text_input(
-        "Enter a topic for quiz",
-        placeholder="Example: Python Basics"
-    )
+    with st.form("quiz_form"):
 
-    submit_quiz = st.form_submit_button("Generate Quiz")
+        quiz_topic = st.text_input(
+            "Enter a topic for quiz",
+            placeholder="Example: Python Basics"
+        )
 
-if submit_quiz:
+        submit_quiz = st.form_submit_button("Generate Quiz")
 
-    if quiz_topic:
+    if submit_quiz:
 
-        with st.spinner("Generating quiz..."):
+        if quiz_topic:
 
-            try:
+            with st.spinner("Generating quiz..."):
 
-                response = client.chat.completions.create(
-                    model="llama-3.1-8b-instant",
-                    messages=[
-                        {
-                            "role": "system",
-                            "content": "Generate 3 simple MCQ quiz questions with answers for students."
-                        },
-                        {
-                            "role": "user",
-                            "content": f"Create quiz on {quiz_topic}"
-                        }
-                    ]
-                )
+                try:
 
-                quiz = response.choices[0].message.content
+                    response = client.chat.completions.create(
+                        model="llama-3.1-8b-instant",
+                        messages=[
+                            {
+                                "role": "system",
+                                "content": "Generate 3 simple MCQ quiz questions with answers for students."
+                            },
+                            {
+                                "role": "user",
+                                "content": f"Create quiz on {quiz_topic}"
+                            }
+                        ]
+                    )
 
-                st.success("Response Generated Successfully!")
-                st.write(quiz)
+                    quiz = response.choices[0].message.content
 
-            except Exception as e:
+                    st.success("Quiz Generated Successfully!")
+                    st.write(quiz)
 
-                st.error(f"Error: {e}")
-    else:
-        st.warning("Please enter a quiz topic.")
+                except Exception as e:
+
+                    st.error(f"Error: {e}")
+
+        else:
+
+            st.warning("Please enter a quiz topic.")
 
 # =========================
 # LEARNING ROADMAP GENERATOR
 # =========================
 
-st.markdown("---")
-st.header("🗺️ AI Learning Roadmap")
+with tabs[3]:
 
-with st.form("roadmap_form"):
+    st.header("🗺️ AI Learning Roadmap")
 
-    roadmap_topic = st.text_input(
-        "Enter a topic to generate roadmap",
-        placeholder="Example: Data Science"
-    )
+    with st.form("roadmap_form"):
 
-    submit_roadmap = st.form_submit_button("Generate Roadmap")
+        roadmap_topic = st.text_input(
+            "Enter a topic to generate roadmap",
+            placeholder="Example: Data Science"
+        )
 
-if submit_roadmap:
-    if roadmap_topic:
+        submit_roadmap = st.form_submit_button("Generate Roadmap")
 
-        with st.spinner("Generating roadmap..."):
+    if submit_roadmap:
 
-            try:
+        if roadmap_topic:
 
-                response = client.chat.completions.create(
-                    model="llama-3.1-8b-instant",
-                    messages=[
-                        {
-                            "role": "system",
-                            "content": "Generate a beginner-friendly step-by-step learning roadmap for STEM students."
-                        },
-                        {
-                            "role": "user",
-                            "content": f"Create roadmap for {roadmap_topic}"
-                        }
-                    ]
-                )
+            with st.spinner("Generating roadmap..."):
 
-                roadmap = response.choices[0].message.content
+                try:
 
-                st.success("Response Generated Successfully!")
-                st.write(roadmap)
+                    response = client.chat.completions.create(
+                        model="llama-3.1-8b-instant",
+                        messages=[
+                            {
+                                "role": "system",
+                                "content": "Generate a beginner-friendly step-by-step learning roadmap for STEM students."
+                            },
+                            {
+                                "role": "user",
+                                "content": f"Create roadmap for {roadmap_topic}"
+                            }
+                        ]
+                    )
 
-            except Exception as e:
+                    roadmap = response.choices[0].message.content
 
-                st.error(f"Error: {e}")
-    else:
-        st.warning("Please enter a roadmap topic.")
+                    st.success("Roadmap Generated Successfully!")
+                    st.write(roadmap)
+
+                except Exception as e:
+
+                    st.error(f"Error: {e}")
+
+        else:
+
+            st.warning("Please enter a roadmap topic.")
 
 # =========================
 # RESUME ANALYZER
 # =========================
 
-st.markdown("---")
-st.header("📄 AI Resume Analyzer")
+with tabs[4]:
 
-with st.form("resume_form"):
+    st.header("📄 AI Resume Analyzer")
 
-    st.subheader("📄 Resume Input")
-    resume_text = st.text_area(
-        "Paste your resume here"
-    )
+    with st.form("resume_form"):
 
-    st.subheader("💼 Job Description")
-    job_text = st.text_area(
-        "Paste job description here"
-    )
+        st.subheader("📄 Resume Input")
 
-    submit_resume = st.form_submit_button("Analyze Resume")
+        resume_text = st.text_area(
+            "Paste your resume here",
+            height=250
+        )
 
-if submit_resume:
+        st.subheader("💼 Job Description")
 
-    try:
+        job_text = st.text_area(
+            "Paste job description here",
+            height=250
+        )
 
-        if resume_text == "" or job_text == "":
+        submit_resume = st.form_submit_button("Analyze Resume")
 
-            st.warning("Please enter both resume and job description")
+    if submit_resume:
 
-        else:
+        try:
 
-            score = calculate_similarity(resume_text, job_text)
+            if resume_text == "" or job_text == "":
 
-            st.success(f"Match Score: {score:.2f}%")
-
-            if score > 70:
-                st.success("Excellent match! You are a strong candidate.")
-
-            elif score > 40:
-                st.info("Good match, but you can improve your skills.")
+                st.warning("Please enter both resume and job description")
 
             else:
-                st.warning("Low match. Consider improving your skills for this role.")
 
-            resume_skills = extract_skills(resume_text)
-            job_skills = extract_skills(job_text)
+                with st.spinner("Analyzing resume..."):
 
-            st.write("Your Skills: ", resume_skills)
-            st.write("Required Skills: ", job_skills)
+                    score = calculate_similarity(resume_text, job_text)
 
-            common_skills = list(set(resume_skills) & set(job_skills))
+                    st.success(f"Match Score: {score:.2f}%")
 
-            st.write("Matching Skills:", common_skills)
+                    if score > 70:
 
-            missing_skills = list(set(job_skills) - set(resume_skills))
+                        st.success("Excellent match! You are a strong candidate.")
 
-            st.write("Skills You Need:", missing_skills)
+                    elif score > 40:
 
-            recommended_role = recommend_role(resume_skills)
+                        st.info("Good match, but you can improve your skills.")
 
-            st.subheader(f"Recommended Role: {recommended_role}")
+                    else:
 
-            if len(missing_skills) > 0:
+                        st.warning("Low match. Consider improving your skills for this role.")
 
-                st.subheader("Suggestions to Improve")
+                    # =========================
+                    # SKILLS ANALYSIS
+                    # =========================
 
-                for skill in missing_skills:
-                    st.write(f"- Learn {skill}")
+                    resume_skills = extract_skills(resume_text)
+                    job_skills = extract_skills(job_text)
 
-            else:
-                st.success("Great! You have most of the required skills.")
+                    st.write("### Your Skills")
+                    st.write(resume_skills)
 
-            labels = ["Match Score (%)", "Number of Skills"]
+                    st.write("### Required Skills")
+                    st.write(job_skills)
 
-            values = [score, len(resume_skills)]
+                    common_skills = list(
+                        set(resume_skills) & set(job_skills)
+                    )
 
-            plt.figure()
+                    st.write("### Matching Skills")
+                    st.write(common_skills)
 
-            plt.bar(labels, values)
+                    missing_skills = list(
+                        set(job_skills) - set(resume_skills)
+                    )
 
-            st.subheader("Performance Overview")
+                    st.write("### Skills You Need")
+                    st.write(missing_skills)
 
-            plt.title("Resume Performance Analysis")
-            st.pyplot(plt)
+                    # =========================
+                    # ROLE RECOMMENDATION
+                    # =========================
 
-            st.caption("This graph shows how well your resume matches the job and how many relevant skills you have.")
+                    recommended_role = recommend_role(resume_skills)
 
-    except Exception as e:
+                    st.subheader(
+                        f"🎯 Recommended Role: {recommended_role}"
+                    )
 
-        st.error(f"Error: {e}")
+                    # =========================
+                    # IMPROVEMENT SUGGESTIONS
+                    # =========================
+
+                    if len(missing_skills) > 0:
+
+                        st.subheader("📚 Suggestions to Improve")
+
+                        for skill in missing_skills:
+
+                            st.write(f"• Learn {skill}")
+
+                    else:
+
+                        st.success(
+                            "Great! You have most of the required skills."
+                        )
+
+                    # =========================
+                    # CHART
+                    # =========================
+
+                    labels = [
+                        "Match Score (%)",
+                        "Number of Skills"
+                    ]
+
+                    values = [
+                        score,
+                        len(resume_skills)
+                    ]
+
+                    fig, ax = plt.subplots()
+
+                    ax.bar(labels, values)
+
+                    ax.set_title("Resume Performance Analysis")
+
+                    st.subheader("📊 Performance Overview")
+
+                    st.pyplot(fig)
+
+                    st.caption(
+                        "This graph shows how well your resume matches the job and how many relevant skills you have."
+                    )
+
+        except Exception as e:
+
+            st.error(f"Error: {e}")
+
+# =========================
+# FOOTER
+# =========================
 
 st.markdown("---")
 

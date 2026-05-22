@@ -4,6 +4,7 @@ from openai import OpenAI
 import os
 import streamlit as st
 import matplotlib.pyplot as plt
+from PyPDF2 import PdfReader
 
 from src.similarity import calculate_similarity
 from src.skill_extractor import extract_skills
@@ -235,14 +236,23 @@ with tabs[4]:
     st.header("📄 AI Resume Analyzer")
 
     with st.form("resume_form"):
+        st.subheader("📄 Upload Resume")
 
-        st.subheader("📄 Resume Input")
-
-        resume_text = st.text_area(
-            "Paste your resume here",
-            height=250
+        uploaded_file = st.file_uploader(
+            "Upload Resume PDF",
+            type=["pdf"]
         )
 
+        resume_text = ""
+
+        if uploaded_file is not None:
+
+            pdf_reader = PdfReader(uploaded_file)
+
+            for page in pdf_reader.pages:
+
+                resume_text += page.extract_text()
+                
         st.subheader("💼 Job Description")
 
         job_text = st.text_area(
